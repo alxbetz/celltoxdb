@@ -1,4 +1,4 @@
-import os
+import os,re
 from flask_appbuilder.security.manager import (
     AUTH_OID,
     AUTH_REMOTE_USER,
@@ -17,8 +17,11 @@ SECRET_KEY = "\2\1thisawdfaawfetawfasfkey\1\2\e\y\y\h"
 # The SQLAlchemy connection string.
 
 #SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://utox_fab:iLoveFAB@/cell_tox_db_fab'
-SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://utox_fab:iLoveFAB@/cell_tox'
+#SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://utox_fab:iLoveFAB@/cell_tox'
 
+db_url = os.environ['DATABASE_URL']
+db_url = re.sub('postgres:','postgres+psycopg2:',db_url)
+SQLALCHEMY_DATABASE_URI = db_url
 # Flask-WTF flag for CSRF
 CSRF_ENABLED = True
 CACHE_TYPE = "simple"

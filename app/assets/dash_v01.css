@@ -1,0 +1,30 @@
+
+body {
+  background-color:#f7f7f7;
+}
+
+#left-board {
+width:  19%;
+float:left;
+padding: 0px 5px 0px 5px;
+background-color: lightgrey;
+border-radius: 20px;
+height:100%;
+}
+
+#right-board {
+width:80%;
+margin: 10 10 10 10;
+float: right;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+#right-board > div {
+ border: 2px solid #ccc;
+  border-radius: 20px;
+  width:91%;
+  margin: 5px;
+  padding: 1em;
+  color: #444;
+}

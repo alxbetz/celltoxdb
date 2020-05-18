@@ -1,0 +1,270 @@
+{% import 'appbuilder/general/lib.html' as lib %}
+{% include 'appbuilder/general/confirm.html' %}
+{% include 'appbuilder/general/alert.html' %}
+
+
+{%- macro render_column(item) -%}
+    {%- set formatter = formatters_columns.get(item) -%}
+    {%- set v = value_columns[include_columns.index(item)] -%}
+    {{ formatter(v) if formatter else v }}
+{%- endmacro -%}
+
+{%- macro render_item(item) -%}
+{{ value_columns[include_columns.index(item)] }}
+{%- endmacro -%}
+
+{% macro format_float(num) %}
+{% if num < 0.001 %}
+{{ '%0.5f'| format(num|float) }}
+{% elif num < 0.1 %}
+{{ '%0.3f'| format(num|float) }}
+{% else %}
+{{ '%0.1f'| format(num|float) }}
+{% endif %}
+{% endmacro %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main_1.css') }}">
+
+<div class="grid_2col">
+    <div>
+        <table id="sample_properties">
+          <thead>
+            <tr>
+                <th>Sample</th>
+                <th></th>
+            </tr>    
+            </thead>
+            <tbody>
+            <tr>
+                <td>Cell Line </td>
+                <td> {{ value_columns[include_columns.index('sample')].cell_line.full_name }} </td>
+            </tr>
+            <tr>
+                <td>Endpoint </td>
+                <td> {{ render_item('endpoint') }} </td>
+            </tr>
+            <tr>
+                <td>Timepoint </td>
+                <td> {{ render_item('timepoint')  }} h </td>
+            </tr>
+           <tr>
+                <td>Medium </td>
+                <td> {{  value_columns[include_columns.index('sample')].medium.full_name }} </td>
+            </tr>
+            <tr>
+                <td>FBS</td>
+                <td> {{ '%0.2f'| format(value_columns[include_columns.index('sample')].fbs|float) }} &#37; </td>
+            </tr>
+
+
+            <tr>
+                <td>Organism</td>
+                <td> <i> {{ value_columns[include_columns.index('sample')].cell_line.organism }} </i> </td>
+            </tr>
+            <tr>
+                <td>Tissue</td>
+                <td> {{ value_columns[include_columns.index('sample')].cell_line.tissue }} </td>
+            </tr>
+            <tr>
+                <td>Plate Size</td>
+                <td> {{ render_item('plate_size') }}-well plate </td>
+            </tr>
+            {% if value_columns[include_columns.index('volume')] %}
+            <tr>
+                <td>Volume</td>
+                <td> {{ render_item('volume') }} </td>
+            </tr>
+            {% endif %}
+            {% if value_columns[include_columns.index('cells_seeded')] %}
+            <tr>
+                <td>Cells Seeded</td>
+                <td> {{ render_item('cells_seeded') }} </td>
+            </tr>
+            {% endif %}
+            <tr>
+                <td>Experimenter </td>
+                <td> {{ render_item('experimenter') }} </td>
+            </tr>
+            </tbody>
+        </table>
+        <table id="exposure_properties">
+            <tbody>
+            <tr>
+                <td>Solvent </td>
+                <td> {{ render_item('solvent') }} </td>
+            </tr>
+            <tr>
+                <td>Dosing </td>
+                <td> {% if value_columns[include_columns.index('dosing')] == 'in' %}
+                indirect
+                {% else %}
+                direct
+                {% endif %}
+                 </td>
+            </tr>
+
+            <tr>
+                <td>Insert</td>
+                <td> {% if value_columns[include_columns.index('insert')] %}
+                yes
+                {% else %}
+                no
+                {% endif %} </td>
+            </tr>
+            <tr>
+                <td>Passive Dosing</td>
+                <td> {% if value_columns[include_columns.index('passive_dosing')] %}
+                yes
+                {% else %}
+                no
+                {% endif %} </td>
+            </tr>
+
+            <tr>
+                <td> Meas/Nom concentration </td>
+                <td> {% if value_columns[include_columns.index('conc_determination')] == 'me' %}
+                measured
+                {% else %}
+                nominal
+                {% endif %} </td>
+            </tr>
+            <tr>
+                <td>Replicates </td>
+                <td> {{ render_item('replicates') }} </td>
+            </tr>
+            <tr>
+                <td> Year </td>
+                <td> {{ render_item('year') }} </td>
+            </tr>
+            <tr>
+                <td> Institution </td>
+                <td> </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    
+
+
+
+
+
+
+
+    <div>
+    <p> <b> Chemical</b> {{ render_item('chemical') }} </p>
+    <p> <b> CAS-Nr</b> {{ value_columns[include_columns.index('chemical')].cas_number }} </p>
+        <table id="chemical_properties">
+            <thead>
+            <tr>
+                <th></th>
+                <th>logKow</th>
+                <th>water solubility [mg/L]</th>
+                <th>Henry's Law Constant [atm m<sup>3</sup> / mole]</th>
+            </tr>    
+            </thead>
+            <tbody>
+            <tr>
+                <td>Experimental</td>
+                <td> 
+                 {% if value_columns[include_columns.index('chemical')].user_corrected_experimental_log_kow %}
+                        {{ value_columns[include_columns.index('chemical')].user_corrected_experimental_log_kow }}
+                 {% else %}
+                    
+                        {{ value_columns[include_columns.index('chemical')].experimental_log_kow or '' }}
+                   
+                 {% endif %}
+                </td>
+                <td>{% if value_columns[include_columns.index('chemical')].experimental_solubility %}
+                        {{ value_columns[include_columns.index('chemical')].experimental_solubility }}
+                    {% else %}
+                       
+                            {{ value_columns[include_columns.index('chemical')].user_corrected_experimental_solubility or '' }}
+                     
+                    {% endif %}</td>
+                <td>{% if value_columns[include_columns.index('chemical')].experimental_henry_constant %}
+                        {{ value_columns[include_columns.index('chemical')].experimental_henry_constant }}
+                    {% else %}
+                      
+                            {{ value_columns[include_columns.index('chemical')].user_corrected_experimental_henry_constant or '' }}
+                     
+                    {% endif %}</td>
+            </tr>
+            <tr>
+                <td>Predicted</td>
+                <td>
+                        {{ value_columns[include_columns.index('chemical')].estimated_log_kow }}
+                  </td>
+                <td>
+                        {{ value_columns[include_columns.index('chemical')].estimated__solubility }}
+                  </td>
+                <td>
+                        {{ value_columns[include_columns.index('chemical')].estimated_henry_constant }}
+                   </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <style> 
+    .img-wrap {
+
+ position: relative;
+  display: inline-block;
+height:650px;
+    }
+    
+    .img-wrap img {
+
+  position: absolute;
+    width : 95%;
+
+  object-fit:contain;
+    }
+    </style>
+    <div class="img-wrap"> 
+    {% if value_columns[include_columns.index('estimated')] is not none %}
+    {{ value_columns[include_columns.index('estimated')].dr_img() }}   </div>
+    {% endif %}
+    <div>     
+    {% if value_columns[include_columns.index('estimated')] is not none %}
+        <table id="estimated">
+            <thead>
+            <tr>
+                <th></th>
+                <th></th>
+
+            </tr>    
+            </thead>
+             <tbody>
+            <tr>
+            
+                <td>EC50</td>
+
+                <td>{{ format_float(value_columns[include_columns.index('estimated')].ec50) }} ({{ format_float(value_columns[include_columns.index('estimated')].ec50_ci_lower) }}-{{ format_float(value_columns[include_columns.index('estimated')].ec50_ci_upper) }})</td>
+        
+            </tr>
+            <tr>
+                <td>EC10</td>
+                   <td>{{ format_float(value_columns[include_columns.index('estimated')].ec10) }} ({{ format_float(value_columns[include_columns.index('estimated')].ec10_ci_lower) }}-{{ format_float(value_columns[include_columns.index('estimated')].ec10_ci_upper) }})</td>
+            </tr>
+            <tr>
+                <td>NTC</td>
+                <td>{{ format_float(value_columns[include_columns.index('estimated')].ntc) }}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+    {% endif %}
+    </div>
+</div>
+
+
+
+{% block actions %}
+<div class="well well-sm">
+    {{ lib.render_action_links(actions, pk, modelview_name) }}
+    {{ lib.lnk_back() }}
+</div>
+{% endblock actions %}

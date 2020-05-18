@@ -1,0 +1,23 @@
+{% extends "main.html" %}
+
+{% from "_tablehelpers.html" import render_table %}
+
+{% block content %}
+<div>
+
+</div>
+<div id = "browse">
+{% if prev_url %}
+ <a href="{{ prev_url }}">  prev </a>
+ {% endif %}
+  {% if next_url %}
+ <a href="{{ next_url }}">  next </a>
+  {% endif %}
+
+ {{ render_table(page,col_description) }}
+ 
+ 
+</div>
+
+{% endblock %}
+

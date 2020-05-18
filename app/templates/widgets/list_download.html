@@ -1,0 +1,29 @@
+{% import 'appbuilder/general/lib.html' as lib %}
+{% extends 'appbuilder/general/widgets/list.html' %}
+
+{% block list_header scoped %}
+   {{ super() }}
+    <a href="{{url_for('Browse' + '.download_csv', **request.args)}}" class="btn btn-sm btn-default">
+       csv
+    </a>
+     <a href="{{url_for('Browse' + '.download_xls', **request.args)}}" class="btn btn-sm btn-default">
+       xls
+    </a>
+{% endblock %}
+
+
+{% block begin_content scoped %}
+{{ super() }}
+{% endblock %}
+
+{% block begin_loop_header scoped %}
+{{ super() }}
+{% endblock %}
+
+{% block begin_loop_values %}
+{{ super() }}
+{% endblock %}
+
+{% block end_content scoped %}
+{{ super() }}
+{% endblock %}

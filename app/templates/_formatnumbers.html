@@ -1,0 +1,7 @@
+{% macro format_float(num) %}
+{% if num < 0.01 %}
+{{ '%0.4f'| format(num|float) }}
+{% else %}
+{{ '%0.2f'| format(num|float) }}
+{% endif %}
+{% endmacro %}

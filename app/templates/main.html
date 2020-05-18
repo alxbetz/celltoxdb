@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% if title %}
+    <title>{{ title }} - CTDB</title>
+    {% else %}
+    <title>Cell line toxicity database</title>
+    {% endif %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main_1.css') }}">
+</head>
+<body style="font-family:Verdana;color:#aaaaaa;">
+<div id="wrapper"> 
+    <h1>
+    Cell line toxicity database
+    </h1>
+    <div class="menu"> 
+        <a href="/browse">Browse</a> 
+        <a href="/search">Search</a> 
+        <a href="/upload">Upload</a> 
+        <a href="/impressum">Impressum</a>
+    </div> 
+    <div id="main">
+   {% block content %}{% endblock %}
+    </div> 
+</div>
+
+</body>
+</html>

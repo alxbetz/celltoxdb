@@ -1,0 +1,72 @@
+{% extends "appbuilder/base.html" %}
+{% from "_tablehelpers.html" import render_tbody %}
+{% from "_formhelpers.html" import render_field_table %}
+
+{% block content %}
+<button onclick="showFilters()">Show filters</button>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main_1.css') }}">
+<div id= "filters">
+<form method="POST">
+<table>
+{{ render_field_table(form) }}
+</table>
+
+</form>
+</div>
+
+<script>
+function showFilters() {
+  var x = document.getElementById("filters");
+  if (x.style.display === "block") {
+    x.style.display = "none";
+  } else {
+    x.style.display = "block";
+  }
+}
+</script>
+ 
+ <div id="pnav">
+<a href=" {{ clear_filters_url }}">Reset Filters</a>
+<ul id="pscroll">
+<li>
+ {% if prev_url %} 
+ <a href="{{ prev_url }}">  prev </a>  
+ {% endif %}  
+ </li>
+ <li>
+  {% if next_url %}  
+ <a href="{{ next_url }}">  next </a>   
+ {% endif %}
+ </li>
+ <li>  {{table.page}} / {{ table.pages }} </li>
+  <li>  Total: {{table.total }} </li>
+ </ul>
+ </div>
+
+<div>
+  <br />
+ </div>
+
+
+<div id = "browse">
+
+
+ 
+
+
+<table>
+<thead>
+<th> Chemical </th>
+<th> Cell line </th>
+<th> Endpoint </th>
+<th> Timepoint [h] </th>
+<th> EC50 [mg/L] </th>
+</thead>
+
+ {{ render_tbody(table) }}
+ </table>
+ 
+
+</div>
+{% endblock %}

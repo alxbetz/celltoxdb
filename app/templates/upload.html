@@ -1,0 +1,10 @@
+{% extends "appbuilder/base.html" %}
+
+{% block content %}
+<h1>Upload new File</h1>
+<form method=post enctype=multipart/form-data>
+    {{ form.hidden_tag() }}
+    {{ form.file }}
+<input type=submit value=Upload>
+</form>
+{% endblock %}

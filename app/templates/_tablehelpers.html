@@ -1,0 +1,47 @@
+
+{% macro render_thead(col_description) %}
+<thead>
+    <tr>
+        {% for d in col_description  %}
+        <th> {{ d['name'] }} </th>
+        {% endfor %}
+    
+</thead>
+{% endmacro %}
+
+{% macro render_tbody(page) %}
+<tbody> 
+     {% for row in page.items  %}
+     <tr>
+         
+      
+        <td>  <a href=" {{ url_for('Browse.show',pk=row.Exposure.id)  }}">
+           {{ row.Exposure.chemical.name }}
+         </td>
+           <td>  <a href="">
+           {{ row.Exposure.sample.cell_line.full_name }}
+         </td>
+                    <td>  <a href="">
+           {{ row.Exposure.endpoint }}
+         </td>
+         
+           <td>  <a href="">
+           {{ row.Exposure.timepoint }}
+         </td>
+         
+         <td>  <a href="">
+           {{ row.Exposure.estimated.ec50_format() }}
+         </td>      
+     </tr>   
+    {% endfor %}
+</tbody>
+{% endmacro %}
+
+{% macro render_table(page,col_description) %}
+Results: {{ page.query.count() }}
+<table>
+{{ render_thead(col_description) }}
+ {{ render_tbody(page) }}
+
+</table>
+{% endmacro %}

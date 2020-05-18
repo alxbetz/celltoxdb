@@ -1,0 +1,165 @@
+
+.menu {
+  float:right;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  width:90%;
+  left: -5%;
+  text-align:center;
+  border-bottom: 2px solid black;
+  border-top: 2px solid black;
+  padding-bottom: 8px;
+
+}
+.menu a {
+  /*background-color:#e5e5e5;*/
+  padding:8px;
+  margin-top:7px;
+  display:block;
+  width:33%;
+  color:black;
+  float: left;
+  text-decoration: none;
+}
+
+.menu a:hover {
+  text-decoration: underline;
+}
+
+#main {
+  float:left;
+  width:100%;
+  padding:15px 20px;
+}
+
+
+
+#wrapper {
+
+  float: right;
+  width:80%;  
+  position: relative;
+  left: -10%; /* or right 50% */
+  text-align: left;
+}
+
+#browse table {
+  width: 80%;
+  border: 0px;
+  border-collapse: collapse; 
+}
+
+#browse th {
+  height: 50px;
+  border-top: 0px;
+  border-left: 0px;
+  border-right: 0px;
+  border-bottom: 1px solid #eee;
+}
+
+#browse td {
+	border: 0px none;
+}
+
+#browse th, td {
+  padding-left: 15px;
+  padding-right: 15px;
+  text-align: left;
+}
+#browse tr:nth-child(even) {background-color: #eee;}
+#browse tr:hover {background-color: #ddd;}
+
+.grid_2col {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+} 
+
+.grid_2col > div {
+  border: 2px solid #333333;
+  border-radius: 3px;
+  background-color: #eeeeee;
+  padding: 1em;
+  color: #333;
+}
+
+    
+#filters {
+display:none;
+}
+
+#sample_properties {
+float: left;
+}
+
+#exposure_properties {
+float: right;
+}
+
+#chemical_properties{
+  border-collapse: collapse; 
+  width: 60%;
+}
+#chemical_properties th {
+padding: 6px;
+}
+
+#chemical_properties td {
+padding: 3px;
+border: 1px solid black;
+}
+
+#drc {
+width: 100%;
+}
+
+#browse a {
+   text-decoration: none; 
+   display: block; 
+   border: 0px solid black;
+   padding: 16px; 
+}
+
+#browse a:link {
+  color: black;
+}
+
+/* visited link */
+#browse a:visited {
+  color: black;
+}
+
+/* mouse over link */
+#browse a:hover {
+  color: grey;
+}
+
+#pnav {
+display: block;
+padding-top: 15px;
+padding-bottom: 10px;
+}
+
+
+
+
+
+#pscroll {
+padding-top:20px;
+list-style-type: none
+}
+#pscroll li {
+ float: left;
+  padding-right: 20px;
+}
+
+#pscroll a {
+    background-color: black;
+    color: white;
+    display: block;
+    height: 30px;
+    line-height: 30px;
+    text-decoration: none;
+    width: 40px;
+    text-align: center;
+}

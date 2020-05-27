@@ -87,13 +87,8 @@ class BrowseCustom(BaseView):
             cache.set("search_query",None)
             cache.set("form_data",None)
 
-        if cache.get("search_query") is not None:
-            ids = cache.get("search_query")
-            q = q.filter(Exposure.id.in_(ids))
-        
-        if cache.get("form_data") is not None:
-            form = SearchForm(MultiDict(cache.get("form_data")))
-            
+
+
         if request.method == 'POST' and form.validate():
             page = request.args.get('page', 1, type=int)
            
@@ -110,7 +105,15 @@ class BrowseCustom(BaseView):
             #cache.set("search_hash" = hash(frozenset(form_dict.items())))
             return redirect(url_for('BrowseCustom.search'))
         
+        if cache.get("form_data") is not None:
+            form = SearchForm(MultiDict(cache.get("form_data")))
+            
+
+        if cache.get("search_query") is not None:
+            ids = cache.get("search_query")
+            q = q.filter(Exposure.id.in_(ids))
         
+
         if page is not None:
             page = 1
 

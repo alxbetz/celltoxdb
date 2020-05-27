@@ -35,7 +35,7 @@ class SearchForm(FlaskForm):
     
     #endpoint_fields = db.session.query(Endpoint.short_name,Endpoint.full_name).all()
     endpoint_fields = [('AB','metabolic activity (alamarBlue or PrestoBlue)'),
-                       ('CFDA','cell membrane integrity (CFDA-AM)'),
+                       ('CF','cell membrane integrity (CFDA-AM)'),
                        ('NR','lysosomal membrane integrity (NeutralRed)')]
     endpoint = SelectMultipleField('Endpoint',[validators.Optional()],
                                    choices = endpoint_fields,
@@ -52,7 +52,7 @@ class SearchForm(FlaskForm):
                                  [validators.Optional()],
                                    choices = [('all','all'),
                                               ('24','24h'),
-                                              ('other','other')
+                                              ('0','other')
                                               ]
                                  )
 

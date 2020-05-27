@@ -1,0 +1,12 @@
+params,values
+ec50,5.5610556376721165
+ec50.ci.lower,0
+ec50.ci.upper,Inf
+ec10,5.30768327102242
+ec10.ci.lower,0
+ec10.ci.upper,Inf
+slope,-47.293090705942625
+slope.ci.lower,-2173647831418246.7
+slope.ci.upper,2173647831418152.2
+ntc,NA
+confidence.level,0.95

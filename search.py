@@ -5,7 +5,7 @@ Created on Wed Apr 22 15:58:42 2020
 @author: Alex
 """
 
-from app.models import Exposure, Chemical, Estimated, Cell_line, Sample, Endpoint, Solvent
+from app.models import Exposure, Chemical, Estimated, Cell_line, Sample, Endpoint, Solvent, Medium
 from sqlalchemy import or_, and_
 
 def composite_query(form,db):
@@ -57,7 +57,7 @@ filter_mapping = {
     "cell_line" : lambda x: Cell_line.short_name.in_(tuple(x)),
     #"timepoint": lambda x: Exposure.timepoint == x,
     "timepoint": lambda x: Exposure.timepoint == int(x) if int(x) == 24 else Exposure.timepoint != 24,
-    "medium" : lambda x: Sample.medium.full_name == x if x =="L15" else Sample.medium.full_name!= x ,
+    "medium" : lambda x: Medium.full_name == x if x =="L15" else Medium.full_name!= x ,
     "conc_determination": lambda x: Exposure.conc_determination == x,
     "logkow_lo": lambda x: or_(Chemical.experimental_log_kow > x,
                                Chemical.user_corrected_experimental_log_kow > x,

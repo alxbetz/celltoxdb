@@ -36,7 +36,7 @@ class SearchForm(FlaskForm):
     #endpoint_fields = db.session.query(Endpoint.short_name,Endpoint.full_name).all()
     endpoint_fields = [('AB','metabolic activity (alamarBlue or PrestoBlue)'),
                        ('CFDA','cell membrane integrity (CFDA-AM)'),
-                       ('NR','lysosomal membrane integritz (NeutralRed')]
+                       ('NR','lysosomal membrane integrity (NeutralRed)')]
     endpoint = SelectMultipleField('Endpoint',[validators.Optional()],
                                    choices = endpoint_fields,
                                    default = [x[0] for x in endpoint_fields],
@@ -48,7 +48,7 @@ class SearchForm(FlaskForm):
                                     default = [x[0] for x in cell_line_fields],
                                     widget = select_multi_checkbox)
     #timepoint = IntegerField('Timepoint [h]',[validators.Optional(),validators.NumberRange(min=0,max=10000000)])
-    timepoint = IntegerField('Timepoint [h]',
+    timepoint = SelectField('Timepoint [h]',
                                  [validators.Optional()],
                                    choices = [('all','all'),
                                               ('24','24h'),
@@ -74,7 +74,7 @@ class SearchForm(FlaskForm):
     logkow_hi = DecimalField("logKow to",[validators.Optional()])
     min_replicates = IntegerField('Minimum # replicates',[validators.Optional()])
     solvent = StringField('Solvent',[validators.Optional()])
-    fbs = SelectField('Passive dosing',[validators.Optional()],
+    fbs = SelectField('FBS',[validators.Optional()],
                                  choices = [('all','all'),('1','yes'),('0','no')])
     dosing = SelectMultipleField('Dosing',[validators.Optional()],
                          choices = [("di","direct"),("in","indirect")],

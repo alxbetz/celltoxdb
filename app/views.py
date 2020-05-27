@@ -105,7 +105,9 @@ class BrowseCustom(BaseView):
             #     flash(field.data)
             q = apply_filters(q,form)
             cache.set("search_query",[x.id for x in q.with_entities(Exposure.id).all()])
-            cache.set("form_data",form.to_dict(flat=False))
+            form_dict = request.form.to_dict(flat=False)
+            cache.set("form_data",form_dict)
+            #cache.set("search_hash" = hash(frozenset(form_dict.items())))
             return redirect(url_for('BrowseCustom.search'))
         
         

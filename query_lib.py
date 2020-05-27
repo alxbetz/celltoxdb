@@ -62,7 +62,8 @@ def get_exposure_eager(db):
       .join(Chemical) \
       .join(Sample) \
       .join(Cell_line) \
-      .join(Endpoint)
+      .join(Endpoint) \
+      .join(Medium)
       
     return q
 

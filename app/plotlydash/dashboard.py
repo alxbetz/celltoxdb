@@ -95,7 +95,7 @@ def create_dashboard(server):
              html.Div(daq.BooleanSwitch(
                   id = "crossfilter-uml",
                   on=False,
-                  label="show in uM/L",
+                  label="show in umol/L",
                   labelPosition="top"
                 )  
  
@@ -213,7 +213,7 @@ def init_callbacks(dash_app,df):
         print(uml)
         if uml:
             dff["ec50"] = (dff["ec50"] / dff["molecular_weight"]) * 1000
-            unit = "[uM/L]"
+            unit = "[umol/L]"
         else:
             unit = "[mg/L]"
        
@@ -295,7 +295,7 @@ def init_callbacks(dash_app,df):
             
         if uml:
             dff["ec50"] = (dff["ec50"] / dff["molecular_weight"]) * 1000
-            unit = "[uM/L]"
+            unit = "[umol/L]"
         else:
             unit = "[mg/L]"
         
@@ -369,7 +369,7 @@ def init_callbacks(dash_app,df):
         dff =  df[lox & hix]
         if uml:
             dff["ec50"] = (dff["ec50"] / dff["molecular_weight"]) * 1000
-            unit = "[uM/L]"
+            unit = "[umol/L]"
         else:
             unit = "[mg/L]"
         

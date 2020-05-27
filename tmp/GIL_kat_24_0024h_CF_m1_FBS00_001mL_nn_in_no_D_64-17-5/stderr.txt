@@ -1,0 +1,26 @@
+Lade nötiges Paket: readxl
+Lade nötiges Paket: dplyr
+
+Attache Paket: 'dplyr'
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+Lade nötiges Paket: readr
+Lade nötiges Paket: bendr
+Lade nötiges Paket: ggplot2
+Lade nötiges Paket: argparser
+Lade nötiges Paket: nlmrt
+Lade nötiges Paket: nls2
+Lade nötiges Paket: proto
+Lade nötiges Paket: tidyr
+Lade nötiges Paket: stringr
+Fehler in nlmrt::nlxb(m.formula, start = start, trace = FALSE, data = fdata) : 
+  gproj is NA
+Ruft auf: <Anonymous> -> fitdr -> nlsfit -> <Anonymous>
+Ausführung angehalten

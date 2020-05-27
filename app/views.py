@@ -69,6 +69,8 @@ class CustomShowWidget(RenderTemplateWidget):
 from search import apply_filters
 from query_lib import get_exposure_eager
 from app import cache
+from werkzeug.datastructures import MultiDict
+
 class BrowseCustom(BaseView):
     
     default_view = 'search'
@@ -83,11 +85,14 @@ class BrowseCustom(BaseView):
         
         if clear:
             cache.set("search_query",None)
-           
+            cache.set("form_data",None)
 
         if cache.get("search_query") is not None:
             ids = cache.get("search_query")
             q = q.filter(Exposure.id.in_(ids))
+        
+        if cache.get("form_data") is not None:
+            form = SearchForm(MultiDict(cache.get("form_data")))
             
         if request.method == 'POST' and form.validate():
             page = request.args.get('page', 1, type=int)
@@ -100,6 +105,7 @@ class BrowseCustom(BaseView):
             #     flash(field.data)
             q = apply_filters(q,form)
             cache.set("search_query",[x.id for x in q.with_entities(Exposure.id).all()])
+            cache.set("form_data",form.to_dict(flat=False))
             return redirect(url_for('BrowseCustom.search'))
         
         

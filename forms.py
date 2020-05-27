@@ -33,7 +33,10 @@ class SearchForm(FlaskForm):
     chemical_name = StringField('Chemical name', [validators.Optional(),validators.Length(max=40)])
     cas_number = StringField('CAS-Nr.',[validators.Optional(),validators.Length(max=12)])
     
-    endpoint_fields = db.session.query(Endpoint.short_name,Endpoint.full_name).all()
+    #endpoint_fields = db.session.query(Endpoint.short_name,Endpoint.full_name).all()
+    endpoint_fields = [('AB','metabolic activity (alamarBlue or PrestoBlue)'),
+                       ('CFDA','cell membrane integrity (CFDA-AM)'),
+                       ('NR','lysosomal membrane integritz (NeutralRed')]
     endpoint = SelectMultipleField('Endpoint',[validators.Optional()],
                                    choices = endpoint_fields,
                                    default = [x[0] for x in endpoint_fields],
@@ -44,23 +47,46 @@ class SearchForm(FlaskForm):
                                     choices = cell_line_fields,
                                     default = [x[0] for x in cell_line_fields],
                                     widget = select_multi_checkbox)
-    timepoint = IntegerField('Timepoint [h]',[validators.Optional(),validators.NumberRange(min=0,max=10000000)])
+    #timepoint = IntegerField('Timepoint [h]',[validators.Optional(),validators.NumberRange(min=0,max=10000000)])
+    timepoint = IntegerField('Timepoint [h]',
+                                 [validators.Optional()],
+                                   choices = [('all','all'),
+                                              ('24','24h'),
+                                              ('other','other')
+                                              ]
+                                 )
+
+    medium = SelectField('Medium',
+                                 [validators.Optional()],
+                                   choices = [('all','all'),
+                                              ('L15','L15'),
+                                              ('L15_other','L15 other')
+                                              ]
+                                 )
+    
+    
     conc_determination = SelectField('Conc. determination',
                                              [validators.Optional()],
-                                             choices = [('',''),("me","measured"),("no","nominal")]
+                                             choices = [('all','all'),("me","measured"),("no","nominal")]
                                             )
 
     logkow_lo = DecimalField("logKow from",[validators.Optional()])
     logkow_hi = DecimalField("logKow to",[validators.Optional()])
     min_replicates = IntegerField('Minimum # replicates',[validators.Optional()])
     solvent = StringField('Solvent',[validators.Optional()])
-    fbs = DecimalField('FBS [%]',[validators.Optional()])
-    insert = SelectField('Insert',[validators.Optional()],choices = [('',''),('1','yes'),('0','no')])
-    passive_dosing = SelectField('Passive dosing',[validators.Optional()],choices = [('',''),('1','yes'),('0','no')])
+    fbs = SelectField('Passive dosing',[validators.Optional()],
+                                 choices = [('all','all'),('1','yes'),('0','no')])
     dosing = SelectMultipleField('Dosing',[validators.Optional()],
                          choices = [("di","direct"),("in","indirect")],
                          default = ["di","in"],
                          widget=select_multi_checkbox)
+    passive_dosing = SelectField('Passive dosing',[validators.Optional()],
+                                 choices = [('all','all'),('1','yes'),('0','no')])
+     
+    insert = SelectField('Cell culture insert',[validators.Optional()],choices = [('all','all'),('1','yes'),('0','no')])
+    
+
+
     
     submit = SubmitField('Filter')
 

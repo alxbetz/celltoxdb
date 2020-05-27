@@ -55,7 +55,9 @@ filter_mapping = {
     "cas_number": lambda x: Chemical.cas_number == x,
     "endpoint" : lambda x: Exposure.endpoint_id.in_(tuple(x)),
     "cell_line" : lambda x: Cell_line.short_name.in_(tuple(x)),
-    "timepoint": lambda x: Exposure.timepoint == x,
+    #"timepoint": lambda x: Exposure.timepoint == x,
+    "timepoint": lambda x: Exposure.timepoint == int(x) if int(x) == 24 else Exposure.timepoint != 24,
+    "medium" : lambda x: Sample.medium.full_name == x if x =="L15" else Sample.medium.full_name!= x ,
     "conc_determination": lambda x: Exposure.conc_determination == x,
     "logkow_lo": lambda x: or_(Chemical.experimental_log_kow > x,
                                Chemical.user_corrected_experimental_log_kow > x,
@@ -65,7 +67,7 @@ filter_mapping = {
                                Chemical.estimated_log_kow < x),
     "min_replicates": lambda x: Exposure.replicates >= x,
     "solvent": lambda x: Solvent.full_name.ilike("%" + x + "%"),
-    "fbs": lambda x: Sample.fbs == (x/100),
+    "fbs": lambda x: Sample.fbs > 0 if x == '1' else Sample.fbs == 0,
     "insert": lambda x: Exposure.insert == (x == '1'),
     "passive_dosing": lambda x: Exposure.passive_dosing == (x == '1'),
     "dosing": lambda x: Exposure.dosing.in_(tuple(x))
@@ -78,10 +80,10 @@ def form_to_filters(form):
             continue
         
         if field.type == "SelectMultipleField":
-            if field.data != field.choices and field.data != ['']:
+            if field.data != field.choices and field.data != [''] and field.data != ['all']:
                 filters.append(filter_mapping[field.name](field.data))
         else:
-            if field.data is not None and field.data != "":
+            if field.data is not None and field.data != "" and field.data != "all":
                 filters.append(filter_mapping[field.name](field.data))
     return filters
 

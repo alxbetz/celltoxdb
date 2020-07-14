@@ -6,6 +6,7 @@ Created on Tue May 12 11:51:10 2020
 """
 from wtforms.widgets import html_params
 
+
 def select_multi_checkbox(field, ul_class='', **kwargs):
     kwargs.setdefault('type', 'checkbox')
     field_id = kwargs.pop('id', field.id)
@@ -20,5 +21,6 @@ def select_multi_checkbox(field, ul_class='', **kwargs):
     html.append(u'</ul>')
     return u''.join(html)
 
-def range_field(fieldFrom,fieldTo, **kwargs):
-    "%s: %s - %s" % (fieldFrom.label,fieldFrom(),fieldTo()) 
+
+def range_field(fieldFrom, fieldTo, **kwargs):
+    "%s: %s - %s" % (fieldFrom.label, fieldFrom(), fieldTo())

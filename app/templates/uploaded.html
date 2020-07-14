@@ -1,13 +1,21 @@
 {% extends "appbuilder/base.html" %}
+{% from "_tablehelpers.html" import render_dict %}
+
+
 
 {% block content %}
-<h1>Upload new File</h1>
-</br>
-{{ fname }}
-</br>
-{{ filehash }}
+<h1>File uploaded</h1>
+<p> {{ message }} </p>
+
+{{ render_dict(rvalidation) }}
+
 
 </br>
+Check the entry <a href="{{ url_for('Browse.show',pk=exposure.id) }}">here</a>:
+</br>
+
+</br>
+Insertion status:
 {{ status }}
 
 

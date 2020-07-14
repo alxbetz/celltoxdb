@@ -12,29 +12,60 @@
 {% macro render_tbody(page) %}
 <tbody> 
      {% for row in page.items  %}
-     <tr>
+     <tr onclick="document.location = '{{ url_for('Browse.show',pk=row.id)  }}';">
          
       
-        <td>  <a href=" {{ url_for('Browse.show',pk=row.Exposure.id)  }}">
-           {{ row.Exposure.chemical.name }}
+        <td> 
+        {% if row.chemical is not none %}
+           {{ row.chemical.name }}
+           {% else %}
+           {{row.nanomaterial.short_rep() }}
+         {% endif %}
          </td>
-           <td>  <a href="">
-           {{ row.Exposure.sample.cell_line.full_name }}
+           <td> 
+           {{ row.cell_line.full_name }}
          </td>
-                    <td>  <a href="">
-           {{ row.Exposure.endpoint }}
-         </td>
-         
-           <td>  <a href="">
-           {{ row.Exposure.timepoint }}
-         </td>
-         
-         <td>  <a href="">
-           {{ row.Exposure.replicates }}
+                    <td>  
+           {{ row.endpoint }}
          </td>
          
-         <td>  <a href="">
-           {{ row.Exposure.estimated.ec50_format() }}
+           <td> 
+           {{ row.timepoint }}
+         </td>
+         
+         <td> 
+           {{ row.replicates }}
+         </td>
+         <td>  
+
+           {% if row.conc_determination == 'me' %}
+                measured
+                {% else %}
+                nominal
+            {% endif %}
+         </td>
+         <td>  
+         {% if row.doi is defined and row.doi is not none and row.doi != "NaN" %}
+         <a href="{{ row.doi }}">
+           doi
+           </a>
+           {% else %}
+           {% if row.year is not none%}
+            {{ row.year }}
+            {% endif %}
+            /
+            {% if row.experimenter is not none%}
+            {{ row.experimenter.full_name }}
+            {% endif %}
+           {% endif %}
+         </td>
+         
+         <td>  
+         {% if row.estimated %}
+           {{ row.estimated.ec50_format() }}
+         {% else %}
+         
+         {% endif %}
          </td>      
      </tr>   
     {% endfor %}
@@ -47,5 +78,21 @@ Results: {{ page.query.count() }}
 {{ render_thead(col_description) }}
  {{ render_tbody(page) }}
 
+</table>
+{% endmacro %}
+
+
+{% macro render_dict(dict) %}
+<table>
+<tbody>
+{% for k,v in dict.items() %}
+<tr>
+    <td> {{ k }} </td>
+    <td> {{ v }} </td>
+</tr>
+
+
+{% endfor %}
+</tbody>
 </table>
 {% endmacro %}

@@ -60,11 +60,18 @@
 
 #browse td {
 	border: 0px none;
+  white-space: nowrap;
+}
+
+#browse td a {
+padding: 0px;
 }
 
 #browse th, td {
   padding-left: 15px;
   padding-right: 15px;
+  padding-top: 8px;
+  padding-bottom: 8px;
   text-align: left;
 }
 #browse tr:nth-child(even) {background-color: #eee;}
@@ -84,7 +91,7 @@
 }
 
     
-#filters {
+.filters {
 display:none;
 }
 

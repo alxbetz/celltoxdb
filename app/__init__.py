@@ -4,7 +4,6 @@ from flask import Flask
 from flask_appbuilder import AppBuilder, SQLA
 from flask_migrate import Migrate
 from flask_caching import Cache
-
 """
  Logging configuration
 """
@@ -17,17 +16,16 @@ app.config.from_object("config")
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 db = SQLA(app)
 appbuilder = AppBuilder(app, db.session)
-migrate = Migrate(app,db)
+migrate = Migrate(app, db)
 cache = Cache(app)
 
 from app.plotlydash.dashboard import create_dashboard
-app = create_dashboard(app)
+if db.engine.dialect.has_table(db.engine, "exposure"):
+    app = create_dashboard(app)
 
 # Compile CSS
 #from app.assets import compile_assets
 #compile_assets(app)
-
-
 """
 from sqlalchemy.engine import Engine
 from sqlalchemy import event
@@ -41,5 +39,5 @@ def set_sqlite_pragma(dbapi_connection, connection_record):
     cursor.close()
 """
 
-from . import views
-
+if db.engine.dialect.has_table(db.engine, "exposure"):
+    from . import views

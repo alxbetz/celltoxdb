@@ -1,72 +1,86 @@
 # -*- coding: utf-8 -*-
 """
+Fill tables with secondary information
 Created on Sun Apr 12 07:41:31 2020
 
 @author: Alex
 """
-#from sqlalchemy.orm import sessionmaker
-#from sqlalchemy import create_engine
+
 from app import db
-from app.models import Chemical, Medium, Experimenter, Cell_line, Endpoint, Solvent
-import json, os,csv
+from app.models import Chemical, Medium, Person, Cell_line, Endpoint, Solvent, \
+    Person_Institution, Institution
+import  os
 import pandas as pd
-
-#engine = create_engine("postgresql+psycopg2://utox_admin:iLoveCellLines@/cell_tox_db")
-
-
-
-
-#DBSession = sessionmaker(bind=engine)
-#session = DBSession()
-
 
 db.create_all()
 session = db.session
 
-with open(os.path.join(".","data","media.csv"),'r') as f:
+
+#add media
+with open(os.path.join(".", "data", "media.csv"), 'r') as f:
     media_info = pd.read_csv(f)
-session.bulk_insert_mappings(Medium,
-                             media_info.to_dict(orient='rows'))
+session.bulk_insert_mappings(Medium, media_info.to_dict(orient='rows'))
 
-with open(os.path.join(".","data","endpoints.csv"),'r') as f:
+#add endpoints
+with open(os.path.join(".", "data", "endpoints.csv"), 'r') as f:
     endpoint_info = pd.read_csv(f)
-session.bulk_insert_mappings(Endpoint,
-                             endpoint_info.to_dict(orient='rows'))
+session.bulk_insert_mappings(Endpoint, endpoint_info.to_dict(orient='rows'))
 
-with open(os.path.join(".","data","solvents.csv"),'r') as f:
-    solvent_info = pd.read_csv(f,sep=';'  )
-session.bulk_insert_mappings(Solvent,
-                             solvent_info.to_dict(orient='rows'))
+#add solvents
+with open(os.path.join(".", "data", "solvents.csv"), 'r') as f:
+    solvent_info = pd.read_csv(f, sep=';')
+session.bulk_insert_mappings(Solvent, solvent_info.to_dict(orient='rows'))
 
-
-with open(os.path.join(".","data","chemicals_info.json"),'r') as f:
-    ch_info = json.load(f)
-    
-
-session.bulk_insert_mappings(Chemical,ch_info)
-
+#add chemicals
+chu = pd.read_excel(os.path.join(".","data","chemicals_unique.xlsx"))
+session.bulk_insert_mappings(Chemical,chu.to_dict(orient="rows"))
 session.commit()
 
 
-session.add(Experimenter(short_name ="jen",full_name = "Jenny Maner"))
-session.add(Experimenter(short_name ="fab",full_name = "Fabian Balk"))
-session.add(Experimenter(short_name ="gay",full_name = "Gayathri Jaikumar"))
-session.add(Experimenter(short_name ="hél",full_name = "Helen Mottaz"))
-session.add(Experimenter(short_name ="mar",full_name = "Maren"))
-session.add(Experimenter(short_name ="han",full_name = "Hannah Schug"))
-session.add(Experimenter(short_name ="mir",full_name = "Miriam"))
-session.add(Experimenter(short_name ="kat",full_name = "Katrin"))
-session.add(Experimenter(short_name ="jul",full_name = "Julita"))
-session.add(Experimenter(short_name ="nev",full_name = "Nev"))
+#add Persons and institutions Institutions
+perXls = pd.ExcelFile(os.path.join(".", "data", "experimenters_filled.xlsx"))
 
-session.add(Cell_line(short_name ="GIL",full_name = "RTgill-W1",organism = "O. mykiss", tissue = "gill"))
-session.add(Cell_line(short_name ="GUT",full_name = "RTgutGC",organism = "O. mykiss", tissue = "gut"))
+perSheet = pd.read_excel(perXls, "Person")
+instSheet = pd.read_excel(perXls, "Institution")
+perInstSheet = pd.read_excel(perXls, "Person_Institution")
 
+perInstSheet['end_year'] = perInstSheet['end_year'].replace("present",
+                                                            10000).astype(int)
+
+perSheet.to_sql("person",
+                db.engine,
+                if_exists='append',
+                schema='public',
+                index=False,
+                chunksize=500)
+
+instSheet.to_sql("institution",
+                 db.engine,
+                 if_exists='append',
+                 schema='public',
+                 index=False,
+                 chunksize=500)
+
+piDicts = []
+
+for rec in perInstSheet.to_dict(orient="records"):
+    person_id = session.query(
+        Person.id).filter_by(short_name=rec['person']).one()[0]
+    institution_id = session.query(
+        Institution.id).filter_by(short_name=rec['institution']).one()[0]
+    piDicts.append({
+        "person_id": person_id,
+        "institution_id": institution_id,
+        "start_year": rec["start_year"],
+        "end_year": rec["end_year"]
+    })
+session.bulk_insert_mappings(Person_Institution, piDicts)
+session.commit()
+
+with open(os.path.join(".", "data", "cell_lines.csv"), 'r') as f:
+    cell_line = pd.read_csv(f, sep=",")
+
+session.bulk_insert_mappings(Cell_line, cell_line.to_dict(orient='rows'))
 
 session.commit()
 session.close()
-
-
-
-
-

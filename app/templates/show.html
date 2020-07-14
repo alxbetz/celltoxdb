@@ -37,7 +37,7 @@
             <tbody>
             <tr>
                 <td>Cell Line </td>
-                <td> {{ value_columns[include_columns.index('sample')].cell_line.full_name }} </td>
+                <td> {{ value_columns[include_columns.index('cell_line')].full_name }} </td>
             </tr>
             <tr>
                 <td>Endpoint </td>
@@ -49,21 +49,21 @@
             </tr>
            <tr>
                 <td>Medium </td>
-                <td> {{  value_columns[include_columns.index('sample')].medium.full_name }} </td>
+                <td> {{  value_columns[include_columns.index('medium')].full_name }} </td>
             </tr>
             <tr>
                 <td>FBS</td>
-                <td> {{ '%0.2f'| format(value_columns[include_columns.index('sample')].fbs|float) }} &#37; </td>
+                <td> {{ '%0.2f'| format(value_columns[include_columns.index('fbs')]|float) }} &#37; </td>
             </tr>
 
 
             <tr>
                 <td>Organism</td>
-                <td> <i> {{ value_columns[include_columns.index('sample')].cell_line.organism }} </i> </td>
+                <td> <i> {{ value_columns[include_columns.index('cell_line')].organism }} </i> </td>
             </tr>
             <tr>
                 <td>Tissue</td>
-                <td> {{ value_columns[include_columns.index('sample')].cell_line.tissue }} </td>
+                <td> {{ value_columns[include_columns.index('cell_line')].tissue }} </td>
             </tr>
             <tr>
                 <td>Plate Size</td>
@@ -136,10 +136,26 @@
                 <td> Year </td>
                 <td> {{ render_item('year') }} </td>
             </tr>
+            {% if value_columns[include_columns.index('institution')] %}
             <tr>
                 <td> Institution </td>
-                <td> </td>
+                <td> {{ value_columns[include_columns.index('institution')].full_name }} </td>
             </tr>
+            {% endif %}
+            {% if value_columns[include_columns.index('corresponding_author')] %}
+            <tr>
+                <td>Corresponding author</td>
+                <td> 
+                    {% if value_columns[include_columns.index('corresponding_author')].orcid %}
+                    <a href = "https://orcid.org/{{ value_columns[include_columns.index('corresponding_author')].orcid }}">
+                    {% endif %}
+                    {{ value_columns[include_columns.index('corresponding_author')].full_name }} 
+                    {% if value_columns[include_columns.index('corresponding_author')].orcid %}
+                    </a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endif %}
             </tbody>
         </table>
     </div>
@@ -153,8 +169,33 @@
 
 
     <div>
-    <p> <b> Chemical</b> {{ render_item('chemical') }} </p>
+    {% if value_columns[include_columns.index('chemical')] is not none %}
+    <p> <b> Chemical</b> {{ value_columns[include_columns.index('chemical')].name }} </p>
     <p> <b> CAS-Nr</b> {{ value_columns[include_columns.index('chemical')].cas_number }} </p>
+    {% else %}
+    <h4> Nanomaterial </h4>
+    <table>
+    <tbody>
+    <tr> 
+        <td>Core </td>
+        <td> {{ value_columns[include_columns.index('nanomaterial')].core }} </td>
+    </tr>
+        <tr> 
+        <td>Coating </td>
+        <td> {{value_columns[include_columns.index('nanomaterial')].coating }} </td>
+    </tr>
+        <tr> 
+        <td>Size </td>
+        <td> {{ value_columns[include_columns.index('nanomaterial')].size }} nm </td>
+    </tr>
+        <tr> 
+        <td>Treatment</td>
+        <td> {{ value_columns[include_columns.index('nanomaterial')].treatment }} </td>
+    </tr>
+    </tbody>
+     </table>
+    {% endif %}
+        
         <table id="chemical_properties">
             <thead>
             <tr>
@@ -228,6 +269,7 @@ height:650px;
     {% endif %}
     <div>     
     {% if value_columns[include_columns.index('estimated')] is not none %}
+    
         <table id="estimated">
             <thead>
             <tr>
@@ -240,10 +282,16 @@ height:650px;
             <tr>
             
                 <td>EC50</td>
+                {% if value_columns[include_columns.index('estimated')].exceeds_value is not none %}
+                   <td>{{ value_columns[include_columns.index('estimated')].exceeds_direction }} than {{ format_float(value_columns[include_columns.index('estimated')].exceeds_value) }} mg/L</td>
 
-                <td>{{ format_float(value_columns[include_columns.index('estimated')].ec50) }} ({{ format_float(value_columns[include_columns.index('estimated')].ec50_ci_lower) }}-{{ format_float(value_columns[include_columns.index('estimated')].ec50_ci_upper) }})</td>
+                {% else %}
+                    <td>{{ format_float(value_columns[include_columns.index('estimated')].ec50) }} ({{ format_float(value_columns[include_columns.index('estimated')].ec50_ci_lower) }}-{{ format_float(value_columns[include_columns.index('estimated')].ec50_ci_upper) }})</td>
+
+                {% endif %}
         
             </tr>
+            {% if value_columns[include_columns.index('estimated')].ec10 is not none %}
             <tr>
                 <td>EC10</td>
                    <td>{{ format_float(value_columns[include_columns.index('estimated')].ec10) }} ({{ format_float(value_columns[include_columns.index('estimated')].ec10_ci_lower) }}-{{ format_float(value_columns[include_columns.index('estimated')].ec10_ci_upper) }})</td>
@@ -253,10 +301,12 @@ height:650px;
                 <td>{{ format_float(value_columns[include_columns.index('estimated')].ntc) }}</td>
                 <td></td>
                 <td></td>
-            </tr>
+            </tr> 
+            {% endif %}
             </tbody>
         </table>
     {% endif %}
+    <p> All values are in mg/L </p>
     </div>
 </div>
 

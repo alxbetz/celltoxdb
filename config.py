@@ -1,4 +1,4 @@
-import os,re
+import os, re
 from flask_appbuilder.security.manager import (
     AUTH_OID,
     AUTH_REMOTE_USER,
@@ -7,26 +7,24 @@ from flask_appbuilder.security.manager import (
     AUTH_OAUTH,
 )
 
-
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-ALLOWED_EXTENSIONS = {'txt','csv','xlsx','xls'}
-# Your App secret key
-SECRET_KEY = "\2\1thisawdfaawfetawfasfkey\1\2\e\y\y\h"
+ALLOWED_EXTENSIONS = {'txt', 'csv', 'xlsx', 'xls'}
 
-# The SQLAlchemy connection string.
+SECRET_KEY = "X&4g>H&{L'}ynuEk\rYcA9*2`!Jvr4)@Fg,4:7?eYjWy)f#m~/"
 
-#SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://utox_fab:iLoveFAB@/cell_tox_db_fab'
-#SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://utox_fab:iLoveFAB@/cell_tox'
-
+# get the SQLAlchemy connection string.
 db_url = os.environ['DATABASE_URL']
-db_url = re.sub('postgres:','postgres+psycopg2:',db_url)
+
+if not re.search('psycopg2', db_url):
+    db_url = re.sub('postgres:', 'postgres+psycopg2:', db_url)
+
+
 SQLALCHEMY_DATABASE_URI = db_url
 # Flask-WTF flag for CSRF
 CSRF_ENABLED = True
 CACHE_TYPE = "simple"
 CACHE_DEFAULT_TIMEOUT = 300
-
 
 # ------------------------------
 # GLOBALS FOR APP Builder
@@ -77,23 +75,47 @@ BABEL_DEFAULT_LOCALE = "en"
 BABEL_DEFAULT_FOLDER = "translations"
 # The allowed translation for you app
 LANGUAGES = {
-    "en": {"flag": "gb", "name": "English"},
-    "pt": {"flag": "pt", "name": "Portuguese"},
-    "pt_BR": {"flag": "br", "name": "Pt Brazil"},
-    "es": {"flag": "es", "name": "Spanish"},
-    "de": {"flag": "de", "name": "German"},
-    "zh": {"flag": "cn", "name": "Chinese"},
-    "ru": {"flag": "ru", "name": "Russian"},
-    "pl": {"flag": "pl", "name": "Polish"},
+    "en": {
+        "flag": "gb",
+        "name": "English"
+    },
+    "pt": {
+        "flag": "pt",
+        "name": "Portuguese"
+    },
+    "pt_BR": {
+        "flag": "br",
+        "name": "Pt Brazil"
+    },
+    "es": {
+        "flag": "es",
+        "name": "Spanish"
+    },
+    "de": {
+        "flag": "de",
+        "name": "German"
+    },
+    "zh": {
+        "flag": "cn",
+        "name": "Chinese"
+    },
+    "ru": {
+        "flag": "ru",
+        "name": "Russian"
+    },
+    "pl": {
+        "flag": "pl",
+        "name": "Polish"
+    },
 }
 # ---------------------------------------------------
 # Image and file configuration
 # ---------------------------------------------------
 # The file upload folder, when using models with files
-UPLOAD_FOLDER = os.path.join(basedir,"app","static","uploads")
+UPLOAD_FOLDER = os.path.join(basedir, "app", "static", "uploads")
 
 # The image upload folder, when using models with images
-IMG_UPLOAD_FOLDER = os.path.join(basedir,"app","static","uploads")
+IMG_UPLOAD_FOLDER = os.path.join(basedir, "app", "static", "uploads")
 
 # The image upload url, when using models with images
 IMG_UPLOAD_URL = "/static/uploads/"

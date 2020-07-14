@@ -20,5 +20,5 @@ E;Ethanol
 M;Methanol
 F;Formic acid
 W;Water
-X;No_Input
-Ban;Unknown_Solvent
+X;No information
+0;No solvent

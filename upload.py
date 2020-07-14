@@ -14,16 +14,16 @@ fields = [
     'medium',
     'FBS',
     'insert_passive_dosing',
-    'dosing', #direct or indirect
+    'dosing',  #direct or indirect
     'concentration_measurement',
     'solvent',
     'cas_number'
-    ]
+]
 
 
 def parse_file_string(s):
     fname = s.split('.')
-    mdict = dict(zip(fields,fname[0].split('_')))
+    mdict = dict(zip(fields, fname[0].split('_')))
     try:
         mdict['plate_size'] = int(mdict['plate_size'])
         mdict['timepoint'] = float(mdict['timepoint'].rstrip('h'))
@@ -34,14 +34,13 @@ def parse_file_string(s):
     except:
         print('Error converting file ')
     return mdict
-    
 
 
 import os
 
-
 s1 = "GIL_fab_24_0048h_CF_m1_FBS00_nn_in_no_D_84268-36-0.xlsx"
 parse_file_string(s1)
 
-files = list(filter(lambda x: not x.startswith('.~lock'),os.listdir('..\\rawdata')))
+files = list(
+    filter(lambda x: not x.startswith('.~lock'), os.listdir('..\\rawdata')))
 res = [parse_file_string(s) for s in files]

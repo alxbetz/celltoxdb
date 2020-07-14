@@ -1,5 +1,0 @@
-recursive-include yourapplication/templates *
-recursive-include yourapplication/static *
-recursive-include yourapplication/plotlydash *
-recursive-include yourapplication/assets *
-recursive-include yourapplication/translations *

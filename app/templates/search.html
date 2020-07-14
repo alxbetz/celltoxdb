@@ -1,47 +1,70 @@
 {% extends "appbuilder/base.html" %}
 {% from "_tablehelpers.html" import render_tbody %}
 {% from "_formhelpers.html" import render_field_table %}
+{% from "_formhelpers.html" import render_field_dropdown %}
 
 {% block content %}
-<button onclick="showFilters()">Show filters</button>
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/main_1.css') }}">
-<div id= "filters">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dropdown.css') }}">
+ <link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
+ <script src="{{ url_for('static', filename='js/dropdown.js') }}"></script> 
+
+<button type="button" class="dropbtn" onclick = "toggleDivWrapper('filter-wrapper')">Show filters</button>
+<div id="filter-wrapper" class= "filters">
 <form method="POST">
 <table>
-{{ render_field_table(form) }}
+{{ render_field_dropdown(form) }}
 </table>
-
+{{ form.submit }}
 </form>
 </div>
 
-<script>
-function showFilters() {
-  var x = document.getElementById("filters");
-  if (x.style.display === "block") {
-    x.style.display = "none";
-  } else {
-    x.style.display = "block";
-  }
-}
-</script>
- 
+
  <div id="pnav">
 <a href=" {{ clear_filters_url }}">Reset Filters</a>
 <ul id="pscroll">
 <li>
+ {% if first_url %} 
+ <a href="{{ first_url }}">  |< </a>  
+ {% endif %}  
+ </li>
+<li>
  {% if prev_url %} 
- <a href="{{ prev_url }}">  prev </a>  
+ <a href="{{ prev_url }}">  < </a>  
  {% endif %}  
  </li>
  <li>
   {% if next_url %}  
- <a href="{{ next_url }}">  next </a>   
+ <a href="{{ next_url }}">  > </a>   
  {% endif %}
  </li>
+  <li>
+  {% if last_url %}  
+ <a href="{{ last_url }}">  >| </a>   
+ {% endif %}
+ </li>
+ <li>
+ <select name="forma" onchange="location = this.value;">
+ <option> Sort by ...</option>
+ {% for row in sort_info %}
+     <option value = "{{ row[0] }}"> {{row[1]}}</option>
+ {% endfor %}
+</select>
+ <li>
  <li>  {{table.page}} / {{ table.pages }} </li>
   <li>  Total: {{table.total }} </li>
+ <li><a href="{{url_for('BrowseCustom.download_csv_custom', **request.args)}}" >
+       csv
+    </a> </li>
+    <li> 
+     <a href="{{url_for('BrowseCustom.download_xls_custom', **request.args)}}">
+       xls
+    </a>
+     </li>
  </ul>
+ 
+ 
  </div>
 
 <div>
@@ -62,6 +85,8 @@ function showFilters() {
 <th> Endpoint </th>
 <th> Timepoint [h] </th>
 <th> Biological replicates </th>
+<th> Conc. determination </th>
+<th> Reference </th>
 <th> EC50 [mg/L] </th>
 </thead>
 

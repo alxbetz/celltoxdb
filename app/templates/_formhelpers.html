@@ -41,3 +41,23 @@
  </tbody>
  
 {% endmacro %}
+
+
+{% macro render_field_dropdown(form) %}
+
+<div id="form_grid">
+{% for field in form  %}
+{% if field.type == "CSRFTokenField" %}
+ {{ form.csrf_token }}
+ {% elif field.type == "SubmitField" %}
+ 
+ {% else %}
+ <div id="{{ field.id  }}-button" class="dropdown-checkbox"><button type="button" onclick="toggleDiv('{{ field.id  }}')" class="dropbtn">{{ field.label  }}</button></div>
+ <div id="{{ field.id  }}" class="dropdown-content" style="display:none;">
+ {{ field(**kwargs)|safe  }}
+ </div>
+ {% endif %}
+ {% endfor %}
+</div>
+
+{% endmacro %}

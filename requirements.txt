@@ -102,7 +102,7 @@ pyexcel==0.5.15
 pyexcel-io==0.5.20
 pyexcel-webio==0.1.4
 pyflakes==2.1.1
-Pygments==2.6.1
+Pygments==2.7.4
 pygtrie==2.3.3
 PyJWT==1.7.1
 pylint==2.4.4

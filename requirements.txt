@@ -35,7 +35,7 @@ et-xmlfile==1.0.1
 filelock==3.0.10
 flake8==3.7.9
 Flask==1.1.2
-Flask-AppBuilder==2.3.2
+Flask-AppBuilder==3.3.0
 Flask-Babel==1.0.0
 Flask-Bcrypt==0.7.1
 Flask-Caching==1.8.0
